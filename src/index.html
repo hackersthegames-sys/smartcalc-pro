@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SmartCalc Pro</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Geist:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-container": "#df7412",
+                    "surface-container-highest": "#353534",
+                    "outline": "#8c909f",
+                    "primary": "#adc6ff",
+                    "inverse-surface": "#e5e2e1",
+                    "on-tertiary-fixed": "#311400",
+                    "background": "#131313",
+                    "surface-bright": "#393939",
+                    "primary-fixed": "#d8e2ff",
+                    "surface-dim": "#131313",
+                    "on-secondary": "#552100",
+                    "tertiary-fixed": "#ffdcc6",
+                    "on-primary-fixed": "#001a42",
+                    "error": "#ffb4ab",
+                    "outline-variant": "#424754",
+                    "on-background": "#e5e2e1",
+                    "inverse-primary": "#005ac2",
+                    "on-surface-variant": "#c2c6d6",
+                    "secondary-fixed": "#ffdbca",
+                    "surface-container": "#201f1f",
+                    "on-tertiary-fixed-variant": "#723600",
+                    "on-surface": "#e5e2e1",
+                    "primary-fixed-dim": "#adc6ff",
+                    "primary-container": "#4d8eff",
+                    "secondary": "#ffb690",
+                    "on-secondary-fixed": "#341100",
+                    "surface-container-high": "#2a2a2a",
+                    "surface-tint": "#adc6ff",
+                    "error-container": "#93000a",
+                    "on-primary-container": "#00285d",
+                    "surface-container-lowest": "#0e0e0e",
+                    "tertiary": "#ffb786",
+                    "on-secondary-fixed-variant": "#783200",
+                    "on-secondary-container": "#4a1c00",
+                    "on-primary": "#002e6a",
+                    "on-error-container": "#ffdad6",
+                    "surface": "#131313",
+                    "surface-container-low": "#1c1b1b",
+                    "on-tertiary": "#502400",
+                    "on-error": "#690005",
+                    "secondary-container": "#ec6a06",
+                    "secondary-fixed-dim": "#ffb690",
+                    "surface-variant": "#353534",
+                    "on-tertiary-container": "#461f00",
+                    "on-primary-fixed-variant": "#004395",
+                    "inverse-on-surface": "#313030",
+                    "tertiary-fixed-dim": "#ffb786"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "sm": "12px",
+                    "grid-gutter": "12px",
+                    "xs": "8px",
+                    "md": "16px",
+                    "lg": "24px",
+                    "base": "4px",
+                    "xl": "32px",
+                    "edge-margin": "20px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "display-sm": ["Inter"],
+                    "label-md": ["Geist"],
+                    "headline-md": ["Inter"]
+            },
+            "fontSize": {
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-sm": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.01em", "fontWeight": "500"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #131313;
+            color: #e5e2e1;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .calc-button {
+            transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s;
+        }
+        .calc-button:active {
+            transform: scale(0.95);
+        }
+        .glass-panel {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        @keyframes slideUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .animate-slide-up {
+            animation: slideUp 0.4s ease-out forwards;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #424754;
+            border-radius: 10px;
+        }
+        #scientific-panel {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+        }
+        #scientific-panel.expanded {
+            max-height: 250px;
+            opacity: 1;
+            margin-bottom: 12px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="flex flex-col items-center justify-center p-0 md:p-6">
+<div class="relative w-full max-w-[420px] h-full md:h-[840px] bg-background shadow-2xl overflow-hidden md:rounded-[40px] flex flex-col border border-outline-variant/20">
+<!-- Header: TopAppBar (from JSON) -->
+<header class="fixed top-0 w-full flex justify-between items-center px-edge-margin h-16 bg-background z-50">
+<div class="flex items-center gap-3">
+<button class="material-symbols-outlined text-primary hover:bg-surface-variant/50 p-2 rounded-full transition-colors" data-icon="menu">menu</button>
+<h1 class="font-display-sm text-[20px] font-bold text-primary">SmartCalc Pro</h1>
+</div>
+<div class="flex items-center gap-2">
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-variant/50 p-2 rounded-full transition-colors" data-icon="history" id="history-btn">history</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-variant/50 p-2 rounded-full transition-colors" data-icon="settings">settings</button>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col pt-16 pb-20 px-edge-margin">
+<!-- Display Area -->
+<section class="flex-none py-lg flex flex-col items-end justify-end min-h-[180px] mb-4">
+<div class="w-full flex gap-2 mb-2 opacity-0 transition-opacity duration-300" id="memory-indicator">
+<span class="text-[10px] px-2 py-0.5 rounded-full bg-surface-container-high text-primary font-bold">M</span>
+</div>
+<div class="w-full overflow-hidden text-right">
+<div class="text-on-surface-variant font-label-md text-label-md mb-2 truncate min-h-[20px]" id="expression"></div>
+<div class="text-on-surface font-display-lg text-display-lg break-all leading-tight" id="result">0</div>
+</div>
+</section>
+<!-- Memory & Mode Toggle -->
+<section class="flex-none flex items-center justify-between mb-lg">
+<div class="flex gap-2">
+<button class="calc-button text-[12px] font-bold text-on-surface-variant px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high" onclick="handleMemory('MC')">MC</button>
+<button class="calc-button text-[12px] font-bold text-on-surface-variant px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high" onclick="handleMemory('MR')">MR</button>
+<button class="calc-button text-[12px] font-bold text-on-surface-variant px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high" onclick="handleMemory('M+')">M+</button>
+</div>
+<button class="flex items-center gap-2 px-4 py-2 rounded-full bg-surface-variant text-on-surface-variant font-label-md text-label-md hover:bg-primary/20 hover:text-primary transition-all" id="mode-toggle">
+<span class="material-symbols-outlined text-[18px]" data-icon="science">science</span>
+                    Scientific
+                </button>
+</section>
+<!-- Keypad -->
+<section class="flex-1 flex flex-col justify-end pb-4" id="keypad-container">
+<!-- Scientific Panel (Hidden by default) -->
+<div class="grid grid-cols-4 gap-grid-gutter" id="scientific-panel">
+<button class="calc-button h-12 rounded-xl bg-surface-container-low text-on-surface-variant font-label-md hover:bg-surface-variant" data-val="sin(">sin</button>
+<button class="calc-button h-12 rounded-xl bg-surface-container-low text-on-surface-variant font-label-md hover:bg-surface-variant" data-val="cos(">cos</button>
+<button class="calc-button h-12 rounded-xl bg-surface-container-low text-on-surface-variant font-label-md hover:bg-surface-variant" data-val="tan(">tan</button>
+<button class="calc-button h-12 rounded-xl bg-surface-container-low text-on-surface-variant font-label-md hover:bg-surface-variant" data-val="sqrt(">√</button>
+<button class="calc-button h-12 rounded-xl bg-surface-container-low text-on-surface-variant font-label-md hover:bg-surface-variant" data-val="log(">log</button>
+<button class="calc-button h-12 rounded-xl bg-surface-container-low text-on-surface-variant font-label-md hover:bg-surface-variant" data-val="ln(">ln</button>
+<button class="calc-button h-12 rounded-xl bg-surface-container-low text-on-surface-variant font-label-md hover:bg-surface-variant" data-val="(">(</button>
+<button class="calc-button h-12 rounded-xl bg-surface-container-low text-on-surface-variant font-label-md hover:bg-surface-variant" data-val=")">)</button>
+</div>
+<!-- Main Pad -->
+<div class="grid grid-cols-4 gap-grid-gutter">
+<!-- Row 1 -->
+<button class="calc-button aspect-square flex items-center justify-center rounded-3xl bg-error-container text-on-error-container text-headline-md font-headline-md hover:brightness-110" id="clear-btn">C</button>
+<button class="calc-button aspect-square flex items-center justify-center rounded-3xl bg-secondary-container text-on-secondary-container text-headline-md font-headline-md hover:brightness-110" data-val="/">÷</button>
+<button class="calc-button aspect-square flex items-center justify-center rounded-3xl bg-secondary-container text-on-secondary-container text-headline-md font-headline-md hover:brightness-110" data-val="*">×</button>
+<button class="calc-button aspect-square flex items-center justify-center rounded-3xl bg-surface-container-high text-on-surface text-headline-md font-headline-md hover:brightness-110" id="backspace-btn">
+<span class="material-symbols-outlined" data-icon="backspace">backspace</span>
+</button>
+<!-- Row 2 -->
+<button class="calc-button aspect-square flex items-center justify-center rounded-3xl bg-surface-container text-on-surface text-headline-md font-headline-md hover:bg-surface-variant" data-val="7">7</button>
+<button class="calc-button aspect-square flex items-center justify-center rounded-3xl bg-surface-container text-on-surface text-headline-md font-headline-md hover:bg-surface-variant" data-val="8">8</button>
+<button class="calc-button aspect-square flex items-center justify-center rounded-3xl bg-surface-container text-on-surface text-headline-md font-headline-md hover:bg-surface-variant" data-val="9">9</button>
+<button class="calc-button aspect-square flex items-center justify-center rounded-3xl bg-secondary-container text-on-secondary-container text-headline-md font-headline-md hover:brightness-110" data-val="-">−</button>
+<!-- Row 3 -->
+<button class="calc-button aspect-square flex items-center justify-center rounded-3xl bg-surface-container text-on-surface text-headline-md font-headline-md hover:bg-surface-variant" data-val="4">4</button>
+<button class="calc-button aspect-square flex items-center justify-center rounded-3xl bg-surface-container text-on-surface text-headline-md font-headline-md hover:bg-surface-variant" data-val="5">5</button>
+<button class="calc-button aspect-square flex items-center justify-center rounded-3xl bg-surface-container text-on-surface text-headline-md font-headline-md hover:bg-surface-variant" data-val="6">6</button>
+<button class="calc-button aspect-square flex items-center justify-center rounded-3xl bg-secondary-container text-on-secondary-container text-headline-md font-headline-md hover:brightness-110" data-val="+">+</button>
+<!-- Row 4 -->
+<button class="calc-button aspect-square flex items-center justify-center rounded-3xl bg-surface-container text-on-surface text-headline-md font-headline-md hover:bg-surface-variant" data-val="1">1</button>
+<button class="calc-button aspect-square flex items-center justify-center rounded-3xl bg-surface-container text-on-surface text-headline-md font-headline-md hover:bg-surface-variant" data-val="2">2</button>
+<button class="calc-button aspect-square flex items-center justify-center rounded-3xl bg-surface-container text-on-surface text-headline-md font-headline-md hover:bg-surface-variant" data-val="3">3</button>
+<button class="calc-button row-span-2 aspect-[1/2.1] flex items-center justify-center rounded-3xl bg-primary-container text-on-primary-container text-[32px] font-bold hover:brightness-110 shadow-lg shadow-primary-container/20" id="equals-btn">=</button>
+<!-- Row 5 -->
+<button class="calc-button aspect-square flex items-center justify-center rounded-3xl bg-surface-container text-on-surface text-headline-md font-headline-md hover:bg-surface-variant" data-val="%">%</button>
+<button class="calc-button aspect-square flex items-center justify-center rounded-3xl bg-surface-container text-on-surface text-headline-md font-headline-md hover:bg-surface-variant" data-val="0">0</button>
+<button class="calc-button aspect-square flex items-center justify-center rounded-3xl bg-surface-container text-on-surface text-headline-md font-headline-md hover:bg-surface-variant" data-val=".">.</button>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-2 bg-surface-container-low border-t border-outline-variant z-50">
+<button class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-2xl p-2 transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="science">science</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</nav>
+<!-- History Overlay Panel -->
+<div class="absolute inset-0 bg-surface-container/95 glass-panel z-50 translate-y-full transition-transform duration-500 flex flex-col" id="history-panel">
+<div class="p-6 flex items-center justify-between border-b border-outline-variant/30">
+<h2 class="font-headline-md text-headline-md text-on-surface">History</h2>
+<button class="material-symbols-outlined text-on-surface-variant p-2 rounded-full hover:bg-surface-variant" data-icon="close" id="close-history">close</button>
+</div>
+<div class="flex-1 overflow-y-auto p-6 custom-scrollbar flex flex-col gap-4" id="history-list">
+<!-- History Items Inject Here -->
+<p class="text-on-surface-variant text-center mt-10">No recent calculations</p>
+</div>
+<div class="p-6">
+<button class="w-full py-3 rounded-xl bg-surface-container-highest text-on-surface-variant font-label-md hover:text-error transition-colors" id="clear-history">Clear History</button>
+</div>
+</div>
+</div>
+<script>
+        // --- Calculator Logic ---
+        const expressionEl = document.getElementById('expression');
+        const resultEl = document.getElementById('result');
+        const modeToggle = document.getElementById('mode-toggle');
+        const scientificPanel = document.getElementById('scientific-panel');
+        const historyPanel = document.getElementById('history-panel');
+        const historyList = document.getElementById('history-list');
+        const memoryIndicator = document.getElementById('memory-indicator');
+        
+        let currentExpression = '';
+        let lastResult = '';
+        let isResultDisplayed = false;
+        let memoryValue = 0;
+        let history = JSON.parse(localStorage.getItem('calc_history') || '[]');
+
+        function updateDisplay() {
+            expressionEl.textContent = currentExpression;
+            resultEl.textContent = lastResult || '0';
+        }
+
+        function hapticFeedback() {
+            if (window.navigator.vibrate) {
+                window.navigator.vibrate(5);
+            }
+        }
+
+        // Event Delegation for keypad
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('.calc-button');
+            if (!btn) return;
+            
+            hapticFeedback();
+
+            const val = btn.getAttribute('data-val');
+            
+            if (val) {
+                if (isResultDisplayed && !isNaN(val)) {
+                    currentExpression = val;
+                    isResultDisplayed = false;
+                } else if (isResultDisplayed && isNaN(val)) {
+                    currentExpression = lastResult + val;
+                    isResultDisplayed = false;
+                } else {
+                    currentExpression += val;
+                }
+                
+                // Real-time calculation preview
+                try {
+                    const cleanExpr = currentExpression.replace(/×/g, '*').replace(/÷/g, '/');
+                    // Simple sanitzation & safety for real-time (basic eval check)
+                    if (currentExpression && !isNaN(currentExpression.slice(-1))) {
+                        lastResult = evalSafe(currentExpression);
+                    }
+                } catch (err) {}
+                
+                updateDisplay();
+            }
+        });
+
+        document.getElementById('clear-btn').addEventListener('click', () => {
+            currentExpression = '';
+            lastResult = '';
+            isResultDisplayed = false;
+            updateDisplay();
+        });
+
+        document.getElementById('backspace-btn').addEventListener('click', () => {
+            currentExpression = currentExpression.slice(0, -1);
+            updateDisplay();
+        });
+
+        document.getElementById('equals-btn').addEventListener('click', () => {
+            if (!currentExpression) return;
+            try {
+                const finalResult = evalSafe(currentExpression);
+                
+                // Save to history
+                if (currentExpression !== finalResult) {
+                    history.unshift({ expr: currentExpression, res: finalResult });
+                    history = history.slice(0, 50); // Keep last 50
+                    localStorage.setItem('calc_history', JSON.stringify(history));
+                }
+
+                currentExpression = '';
+                lastResult = finalResult.toString();
+                isResultDisplayed = true;
+                updateDisplay();
+            } catch (err) {
+                lastResult = 'Error';
+                updateDisplay();
+            }
+        });
+
+        function evalSafe(expr) {
+            try {
+                // Replacing visual chars with math ones
+                let processed = expr
+                    .replace(/×/g, '*')
+                    .replace(/÷/g, '/')
+                    .replace(/sin\(/g, 'Math.sin(')
+                    .replace(/cos\(/g, 'Math.cos(')
+                    .replace(/tan\(/g, 'Math.tan(')
+                    .replace(/sqrt\(/g, 'Math.sqrt(')
+                    .replace(/log\(/g, 'Math.log10(')
+                    .replace(/ln\(/g, 'Math.log(');
+
+                // Use a Function constructor instead of eval for slightly better practice
+                const result = new Function(`return ${processed}`)();
+                
+                if (!isFinite(result)) return 'Division by Zero';
+                
+                // Handle float precision
+                return parseFloat(result.toFixed(8)).toString();
+            } catch (e) {
+                return 'Error';
+            }
+        }
+
+        // --- UI Interactions ---
+        modeToggle.addEventListener('click', () => {
+            scientificPanel.classList.toggle('expanded');
+            modeToggle.classList.toggle('bg-primary-container');
+            modeToggle.classList.toggle('text-on-primary-container');
+        });
+
+        document.getElementById('history-btn').addEventListener('click', () => {
+            renderHistory();
+            historyPanel.classList.remove('translate-y-full');
+        });
+
+        document.getElementById('close-history').addEventListener('click', () => {
+            historyPanel.classList.add('translate-y-full');
+        });
+
+        document.getElementById('clear-history').addEventListener('click', () => {
+            history = [];
+            localStorage.setItem('calc_history', '[]');
+            renderHistory();
+        });
+
+        function renderHistory() {
+            if (history.length === 0) {
+                historyList.innerHTML = `<p class="text-on-surface-variant text-center mt-10">No recent calculations</p>`;
+                return;
+            }
+            historyList.innerHTML = history.map((item, idx) => `
+                <div class="history-item group cursor-pointer p-4 rounded-2xl bg-surface-container-low hover:bg-surface-variant transition-colors" data-expr="${item.expr}">
+                    <div class="text-on-surface-variant text-label-md mb-1">${item.expr}</div>
+                    <div class="text-on-surface text-headline-md text-right font-bold">= ${item.res}</div>
+                </div>
+            `).join('');
+
+            // Click history to restore
+            document.querySelectorAll('.history-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    currentExpression = item.getAttribute('data-expr');
+                    isResultDisplayed = false;
+                    updateDisplay();
+                    historyPanel.classList.add('translate-y-full');
+                });
+            });
+        }
+
+        // Memory Functions
+        window.handleMemory = function(type) {
+            hapticFeedback();
+            const currentVal = parseFloat(lastResult) || 0;
+            switch(type) {
+                case 'MC':
+                    memoryValue = 0;
+                    memoryIndicator.classList.add('opacity-0');
+                    break;
+                case 'MR':
+                    currentExpression += memoryValue.toString();
+                    updateDisplay();
+                    break;
+                case 'M+':
+                    memoryValue += currentVal;
+                    memoryIndicator.classList.remove('opacity-0');
+                    break;
+                case 'M-':
+                    memoryValue -= currentVal;
+                    memoryIndicator.classList.remove('opacity-0');
+                    break;
+            }
+        };
+
+        // Long press result to copy
+        resultEl.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            navigator.clipboard.writeText(resultEl.textContent).then(() => {
+                alert('Copied to clipboard');
+            });
+        });
+
+        // Initialize display
+        updateDisplay();
+    </script>
+</body></html>

@@ -1,0 +1,10 @@
+{
+  "appId": "com.smartcalc.pro",
+  "appName": "SmartCalc Pro",
+  "webDir": "dist",
+  "plugins": {
+    "SplashScreen": {
+      "launchAutoHide": false
+    }
+  }
+}
