@@ -7,4 +7,5 @@ export default defineConfig({
     minify: false,
     emptyOutDir: true,
   },
+  base: './',
 });
