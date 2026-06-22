@@ -2,6 +2,9 @@ workflows:
   android-build:
     name: Android APK Build
 
+    environment:
+      java: 21
+
     scripts:
       - name: Build APK
         script: |
